@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@600&display=swap");
+
+* {
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body {
+  background: #393e41;
+}
+
+img {
+  max-width: 150px;
+}
+
+h1 {
+  margin-bottom: 5%;
+  font-family: "Gemunu Libre", sans-serif;
+  font-size: 4em;
+  color: #f6f7eb;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tateti {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  width: 400px;
+  margin: 0 auto;
+}
+
+.positions {
+  width: 135px;
+  height: 135px;
+  border: 3.5px solid #f6f7eb;
+  cursor: pointer;
+  font-size: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gameover-msg {
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  color: #393e41;
+  width: 200px;
+  height: 150px;
+  background: #f6f7eb;
+  border-radius: 8px;
+  box-shadow: 0 0 5px black;
+  display: none;
+}
+h3 {
+  margin-top: 35px;
+  margin-bottom: 20px;
+}
+
+button {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  color: #f6f7eb;
+  margin: auto;
+  padding: 8px;
+  background: #393e41;
+  border-radius: 4px;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+}

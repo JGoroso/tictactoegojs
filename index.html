@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+  <title>TIC-TAC-TOE</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Tic Tac Toe - Golang</h1>
+    <div class="tateti">
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+      <div class="positions"></div>
+
+    </div>
+    <div id="gameover-msg">
+      <h3 id="winner"></h3>
+      <button id="reset-btn">New Game :)</button>
+    </div>
+  </div>
+
+  <script>
+    const positions = document.querySelector(".tateti")
+    const message = document.querySelector("#gameover-msg")
+    const winner = document.querySelector("#winner")
+    const restart = document.querySelector("#reset-btn")
+    const positionClickedNodes = Array.from(positions.children)
+
+
+    let playerO = 'https://i.ibb.co/j4PSFzh/GOLANG-O.png'
+    let playerX = 'https://i.ibb.co/T8pFSV4/GOLANG-X.png'
+    let playerSelect = playerO
+    let gameOn = true
+    let restartGame = true
+    let draw = false
+
+
+    positions.addEventListener("click", (e) => {
+      const positionClicked = e.target
+
+      const positionIndex = Array.from(positionClicked.parentNode.children).indexOf(positionClicked)
+
+
+      if (!gameOn) {
+        return
+      }
+
+
+      if (positionClicked.innerHTML == "") {
+        playerSelect = (playerSelect === playerX) ? playerO : playerX
+        positionClicked.innerHTML = `<img src="${playerSelect}" alt="playerSelected" >`
+      }
+
+      fethResult(positionIndex, playerSelect)
+
+    })
+
+
+
+
+    function fethResult(index, player) {
+
+      fetch("/gameRounds?i=" + index + "&p=" + player)
+
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          gameOn = data.gameon
+
+          if (!gameOn) {
+            message.style.display = 'block';
+            data.player == playerO ?
+              winner.textContent = 'Golang O Wins!' :
+              winner.textContent = 'Golang X Wins!'
+          }
+
+          draw = data.isdraw
+          if (draw) {
+            message.style.display = 'block';
+            winner.textContent = 'EMPATE!'
+            isRestart()
+          }
+        })
+    }
+
+
+
+
+    // Restart
+    const isRestart = () => {
+      restart.addEventListener("click", (e) => {
+        e.preventDefault()
+        positionClickedNodes.forEach(element => {
+          element.textContent = ''
+        });
+        message.style.display = "none"
+        fetch("/gameRounds?r=" + restartGame)
+        gameOn = true
+      })
+    }
+    isRestart()
+  </script>
+</body>
+
+</html>
