@@ -22,7 +22,6 @@
       <div class="positions"></div>
       <div class="positions"></div>
       <div class="positions"></div>
-
     </div>
     <div id="gameover-msg">
       <h3 id="winner"></h3>
@@ -42,26 +41,30 @@
     let playerX = 'https://i.ibb.co/T8pFSV4/GOLANG-X.png'
     let playerSelect = playerO
     let gameOn = true
-    let restartGame = true
     let draw = false
 
 
     positions.addEventListener("click", (e) => {
+      // obtenemos el target del evento click
       const positionClicked = e.target
-
+      // obtenemos el indice de la posicion clickeada
       const positionIndex = Array.from(positionClicked.parentNode.children).indexOf(positionClicked)
 
-
+      // en caso de que al hacer click el juego este finalizado
+      // no realizaremos no continuaremos con este evento.
       if (!gameOn) {
         return
       }
 
-
+      // Mientras que el contenido de la posicion sea vacio podremos agregar 
+      // a nuestros amigos Golang X o Golang O
       if (positionClicked.innerHTML == "") {
         playerSelect = (playerSelect === playerX) ? playerO : playerX
         positionClicked.innerHTML = `<img src="${playerSelect}" alt="playerSelected" >`
       }
 
+
+      // Envaimos a la funcion fetch el indice de la posicion clickeada y su respectivo player.
       fethResult(positionIndex, playerSelect)
 
     })
@@ -72,10 +75,9 @@
     function fethResult(index, player) {
 
       fetch("/gameRounds?i=" + index + "&p=" + player)
-
         .then(response => response.json())
         .then(data => {
-          console.log(data)
+          // obtenemos la respuesta desde Golang y activamos el cartel de quien gano o el cartel de empate.
           gameOn = data.gameon
 
           if (!gameOn) {
@@ -84,6 +86,7 @@
               winner.textContent = 'Golang O Wins!' :
               winner.textContent = 'Golang X Wins!'
           }
+
 
           draw = data.isdraw
           if (draw) {
@@ -99,12 +102,15 @@
 
     // Restart
     const isRestart = () => {
+      let restartGame = true
       restart.addEventListener("click", (e) => {
         e.preventDefault()
+        // limpiamos los childrens
         positionClickedNodes.forEach(element => {
           element.textContent = ''
         });
         message.style.display = "none"
+        // enviamos un bool en true para poder realizar un restart
         fetch("/gameRounds?r=" + restartGame)
         gameOn = true
       })

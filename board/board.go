@@ -5,12 +5,15 @@ import (
 )
 
 var (
-	GAMECHOOSE   = [9]string{"", "", "", "", "", "", "", "", ""}
+	//Guardamos los movimientos
+	GAMECHOOSE = [9]string{"", "", "", "", "", "", "", "", ""}
+	//Array de posibilidades
 	POSIBILITIES = [][]int{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}}
 	gameActive   = true
 	isDraw       = false
 )
 
+// Creamos estructura para luego retornarla y consumirla como json.
 type Round struct {
 	GameOn bool   `json:"gameon"`
 	Player string `json:"player"`
@@ -18,17 +21,21 @@ type Round struct {
 }
 
 func GameFunc(player string, positionIndex int, restart bool) Round {
-
+	// Asignar posiciones
 	addChoose(player, positionIndex)
-
+	// Realiza el chequeo de si existe un ganador
 	GameWin()
+	// Permite resetear el juego
 	isRestart(restart)
+	// Busca un posible empate
 	lookForDraw()
 
+	//Instanciamos variable con tipo de dato Round y asignamos los valores
 	var result Round
 	result.Player = player
 	result.GameOn = gameActive
 	result.Draw = isDraw
+	//Retornamos info para consumir desde el frontend
 	return result
 }
 
